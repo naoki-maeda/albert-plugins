@@ -9,7 +9,7 @@ from subprocess import run
 
 from albert import *
 
-md_iid = "0.5"
+md_iid = "1.0"
 md_version = "1.0"
 md_name = "Git Repository Access"
 md_description = "Access Git Repository with ghq"
@@ -23,7 +23,7 @@ gitlab_icon = [os.path.dirname(__file__) + "/gitlab-logo-500.svg"]
 vscode_icon = [os.path.dirname(__file__) + "/vscode.svg"]
 
 
-class Plugin(QueryHandler):
+class Plugin(TriggerQueryHandler):
     def id(self):
         return __name__
 
@@ -39,7 +39,7 @@ class Plugin(QueryHandler):
     def synopsis(self):
         return "Enter Repository Search Text"
 
-    def handleQuery(self, query):
+    def handleTriggerQuery(self, query):
         search_text = query.string.strip()
         if not search_text:
             return
