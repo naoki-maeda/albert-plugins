@@ -16,7 +16,7 @@ md_description = "Access Git Repository with ghq"
 md_license = "MIT"
 md_url = "https://github.com/naoki-maeda/albert-plugins"
 md_maintainers = "@naoki-maeda"
-md_bin_dependencies = ["rg", "ghq", "code"]
+md_bin_dependencies = ["grep", "ghq", "code"]
 
 
 class Plugin(PluginInstance, TriggerQueryHandler):
@@ -44,7 +44,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
         ghq_root = None
         try:
             ghq_list = run(
-                f"ghq list | rg {search_text}",
+                f"ghq list | grep {search_text}",
                 capture_output=True,
                 encoding="utf-8",
                 check=True,
