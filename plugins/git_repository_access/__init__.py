@@ -4,12 +4,12 @@ Access Git Repository with ghq.
 Open Browser or VsCode.
 """
 
-import os
+from pathlib import Path
 from subprocess import run
 
 from albert import *
 
-md_iid = "1.0"
+md_iid = "2.0"
 md_version = "1.0"
 md_name = "Git Repository Access"
 md_description = "Access Git Repository with ghq"
@@ -18,23 +18,20 @@ md_url = "https://github.com/naoki-maeda/albert-plugins"
 md_maintainers = "@naoki-maeda"
 md_bin_dependencies = ["grep", "ghq", "code"]
 
-github_icon = [os.path.dirname(__file__) + "/github-mark.svg"]
-gitlab_icon = [os.path.dirname(__file__) + "/gitlab-logo-500.svg"]
-vscode_icon = [os.path.dirname(__file__) + "/vscode.svg"]
 
-
-class Plugin(TriggerQueryHandler):
-    def id(self):
-        return __name__
-
-    def name(self):
-        return md_name
-
-    def description(self):
-        return md_description
-
-    def defaultTrigger(self):
-        return "gh "
+class Plugin(PluginInstance, TriggerQueryHandler):
+    def __init__(self):
+        TriggerQueryHandler.__init__(
+            self,
+            id=md_id,
+            name=md_name,
+            description=md_description,
+            defaultTrigger='gh '
+        )
+        PluginInstance.__init__(self, extensions=[self])
+        self.icon_url_github = [f"file:{Path(__file__).parent}/github-mark.svg"]
+        self.icon_url_gitlab = [f"file:{Path(__file__).parent}/gitlab-logo-500.svg"]
+        self.icon_url_vscode = [f"file:{Path(__file__).parent}/vscode.svg"]
 
     def synopsis(self):
         return "Enter Repository Search Text"
@@ -76,9 +73,9 @@ class Plugin(TriggerQueryHandler):
 
             # GitHub Browser Open
             if gh.startswith("github.com"):
-                item = Item(
+                item = StandardItem(
                     id=f"GitHub {gh}",
-                    icon=github_icon,
+                    iconUrls=self.icon_url_github,
                     text=gh,
                     actions=[
                         Action(
@@ -92,9 +89,9 @@ class Plugin(TriggerQueryHandler):
 
             # GitLab Browser Open
             elif gh.startswith("gitlab.com"):
-                item = Item(
+                item = StandardItem(
                     id=f"GitLab {gh}",
-                    icon=gitlab_icon,
+                    iconUrls=self.icon_url_gitlab,
                     text=gh,
                     actions=[
                         Action(
@@ -107,9 +104,9 @@ class Plugin(TriggerQueryHandler):
                 items.append(item)
 
             # VsCode Folder Open
-            item = Item(
+            item = StandardItem(
                 id=f"VsCode {gh}",
-                icon=vscode_icon,
+                iconUrls=self.icon_url_vscode,
                 text=gh,
                 actions=[
                     Action(
